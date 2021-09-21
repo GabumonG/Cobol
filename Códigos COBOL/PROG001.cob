@@ -1,0 +1,13 @@
+IDENTIFICATION                          DIVISION.
+PROGRAM-ID. PROG002.
+ENVIROMENT                              DIVISION.
+DATA                                    DIVISION.
+WORKING-STORAGE                         SECTION.
+77  WRK-NOME      PIC X(30) VALUE SPACES.
+77  WRK-EMPRESA   PIC X(15) VALUE SPACES.
+PROCEDURE                               DIVISION.
+	ACCEPT WRK-NOME.
+	ACCEPT WRK-EMPRESA.
+    DISPLAY 'NOME......' WRK-NOME.
+	DISPLAY 'EMPRESA...' WRK-EMPRESA.
+    STOP RUN.
