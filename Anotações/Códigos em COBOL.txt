@@ -1,0 +1,59 @@
+************************************************************************
+*********O JCL QUE COMPILA**********************************************
+HERC01.LIBS.JCL(COMPILA) - apenas para mostrar nome e onde fica
+
+HERC01XX JOB (PROG001),
+	'EXECUTA PROG001',
+	CLASS=A,
+	MSGCLASS=H,
+	REGION=8M,TIME=1440,
+	MSGLEVEL=(1,1),
+	NOTIFY=HERC01
+COMPILA	EXEC COBOL,
+	PROG='PROG001',
+	BIBF='HERC01.LIBS.COBOL',
+	BIBC='HERC01.LIBS.LOAD'
+
+*************************************************************************
+*********O JCL QUE EXECUTA***********************************************
+HERC01.LIBS.JCL(EXEC01) - apenas para mostrar nome e onde fica
+
+HERC01XX JOB (PROG001),
+	'EXECUTA PROG001',
+	CLASS=A,
+	MSGCLASS=H,
+	REGION=8M,TIME=1440,
+	MSGLEVEL=(1,1),
+	NOTIFY=HERC01
+STEP01     EXEC PGM=PROG001
+STEPLIB    DD DSN=HERC01.LIBS.LOAD,DISP=SHR
+SYSOUT     DD SYSOUT=*
+
+*************************************************************************
+*********O PRIMEIRO PROGRAMA EM COBOL************************************
+IDENTIFICATION                          DIVISION.
+PROGRAM-ID. PROG001.
+ENVIROMENT                              DIVISION.
+DATA                                    DIVISION.
+WORKING-STORAGE                         SECTION.
+PROCEDURE                               DIVISION.
+    DISPLAY 'PRIMEIRO PROGRAMA'.
+    STOP RUN.
+
+obs.: o local onde contém aspas simples é por conta do compilador JCL, em compiladores mais novos de COBOl é utilizado aspas duplas
+
+*************************************************************************
+*********PROG002 - SEGUNDO PROGRAMA EM COBOL*****************************
+IDENTIFICATION                          DIVISION.
+PROGRAM-ID. PROG002.
+ENVIROMENT                              DIVISION.
+DATA                                    DIVISION.
+WORKING-STORAGE                         SECTION.
+77  WRK-NOME      PIC X(30) VALUE SPACES.
+77  WRK-EMPRESA   PIC X(15) VALUE SPACES.
+PROCEDURE                               DIVISION.
+	ACCEPT WRK-NOME.
+	ACCEPT WRK-EMPRESA.
+    DISPLAY 'NOME......' WRK-NOME.
+	DISPLAY 'EMPRESA...' WRK-EMPRESA.
+    STOP RUN.

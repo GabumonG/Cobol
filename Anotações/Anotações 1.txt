@@ -1,0 +1,81 @@
+COMANTOS ÚTEIS PARA NAVEGAR PELO TN3270:
+'COMANDO' -> 'PARA QUE SERVE'
+
+f3          ->    Volta
+n1.n2       ->    Navega quantos menus colocar (desde que se saiba qual quer ir ex.: 3.2 vai para o menu 3 e depois para o 2)    
+=.          ->    Volta no menu principal
+=x          ->    Volta para o menu inicial
+res         ->    Resetar, limpa a 'sujeira' da tela (tanto na área de resposta e ações passadas, quanto dentro do arquivo)
+c           ->    Change, trocar  (ex.: c a b -> trocar a por b)
+cols        ->    Régua, abre uma régua para ficar mais fácil a visualização das colunas
+F11         ->    Mostra mais um pedaço da tela do lado direito (da coluna 74 em diante, é utlizado apenas pelo compilador)
+F10         ->    Mostra mais um pedaço da tela do lado esquerdo 
+REF         ->    Atualiza a tela, apaga os arquivos deletados
+SAVE        ->    Salva o que foi escrito, apesar do editor salvar automaticamente ao sair usando F3, é possível utilizar esse comando para salvar antes mesmo de sair da tela
+F8          ->    Avança para baixo no arquivo
+
+COMANDOS DE LINHA:
+I           ->    Insert, insere uma linha nova (colocar comando no número verde da linha), para abrir mais de uma linha utilize I + número de linhas desejados (ex.: I5 para 5 linhas)
+D           ->    Delete, deleta a linha, para deletar mais de uma linha é possível usar a mesma lógica do insert (D + o número de linhas desejados, ex.: D3 para 3 linhas)
+R           ->    Replicar, esse comando replica a linha desejada (é possível usar o mesmo conceito do insert e delete)
+M e A       ->    Mover, esse comando move a linha desejada para fazer isso é necessário colocar M na linha que quer mover e A na linha anterior para onde ela irá (A = After)
+M e B       ->    Mover, o A move para a seguinte linha onde o A foi colocado, já o B move para a linha anterior onde o B foi colocado (B = Before)
+C e A       ->    Copiar, esse comando copia a linha desejada utilizando o mesmo conceito do comando Mover (A = After)
+C e B       ->    Copiar, o A copia para a seguinte linha onde o A foi colocado, já o B copia para a linha anterior onde o B foi colocado (B = Before)
+CAPS ON e OFF  -> Liga e desliga o modo que torna qualquer inserção na tela maiúscula, por boas práticas é sempre bom deixar o CAPS ON, pois o JCL não aceita 
+UC          ->    Upper Case, esse comando torna os caracteres da linha digitada maiúscula, é possível usar o mesmo conceito de insert e delete (UC + o número de linhas desejados, ex.: UC3 para 3 linhas)
+CUT         ->    Cortar, esse comando copia a região informada, para isso basta colocar CC na primeira linha de onde quer copiar e caso tenham mais linhas colocar CC na última delas e depois executar o CUT
+PASTE       ->    Colar, após usar o CUT em algum arquivo vá no local desejado e execute o PASTE para colar o que foi copiado
+SUB         ->    SUBMIT, esse comando é para submeter o compilador JCL a rodar o código
+F8          ->    Avança, esse comando avança para a parte seguinte da página
+TOP         ->    Topo, esse comando avança para o topo da página diretamente
+M (com ENTER) ->  Esse comando avança para o final da página diretamente, é necessário executá-lo usando F8 ao invés do ENTER
+S NOME      ->    Criar, esse comando cria um novo arquivo com o nome colocado na frente do S (exemplo: "S COMPILA" para criar um arquivo chamado compila)
+COPY NOME   ->    Copiar, esse comando copia diretamente tudo do arquivo apenas colocando o nome dele do lado do comando (mas antes é importante criar o arquivo usando S NomeArquivo)
+
+OBSERVAÇÕES: 
+- É possível colocar os comandos onde está os asteriscos também
+- Também é possível acessar o arquivo que quer mudar diretamente, basta no menu principal ir na opção 1(RFE), depois opção 2(EDIT) e depois digitar o nome do particionado, no caso seria HERC01 em (PROJECT) > LIBS em (LIBRARY) e COBOL em (TYPE) ----> esse é um exemplo para acessar o arquivo de COBOL, para outros arquivos é só digitar o caminho correto
+
+*PARA CASO SE ESQUEÇA COMO CONECTAR AO TK4:
+- Primeiro entrar no prompt de comando e acessar a pasta TK4 (utilize o comando cd para entrar na pasta desejada)
+- Dentro da pasta TK4 enviar o comando em minúsculo 'mvs'
+- Após executar o  comando pode abrir o TN3270 e utilizar 
+- Para encerrar sessão é só dar f3 até o menu inicial e digitar SHUTDOWN e depois digitar LOGOFF
+- Após esperar o prompt de comando mostar o job de encerramento é só digitar EXIT para sair
+OBS.: Caso o prompt de comando fique travado na sessão é só apertar ESC e depois W e por fim Y 
+
+SOBRE DATASETS
+
+BLOCO         4KB
+TRILHA        56KB
+CILINDRO      15 * 56KB = 840KB
+
+OBS.: CASO SEJA NECESSÁRIO UM SOURCE DE UM DETERMINADO TAMANHO, É SEMPRE BOM AUMENTAR 50% DO TAMANHO DELE. EXEMPLO: UM SOURCE DE 800KB UTILIZARIA APENAS 1 CILINDRO, MAS POR GARANTIA É MELHOR RESERVAR 2 CILINDROS PARA TER UM TAMANHO DE 1200KB (50% A MAIS)
+
+CRIANDO DATASETS:
+No exemplo dado vamos criar uma biblioteca LIBS para armazenar o COBOL, o JCL e o LOAD
+As especificações de cada uma são:
+
+LIBS
+    COBOL
+        FIXO 80    PRIM 10    SEC 02    BLOCO 10     RECORD LENGTH 19040
+    JCL
+        FIXO 80    PRIM 10    SEC 02    BLOCO 10     RECORD LENGTH 19040
+    LOAD
+        U     COPIAR AS INFORMAÇÕES DO HER01.PRIVLIB.LOAD
+
+Nomenclatura (PRIM = primária, SEC = secundária)
+
+Para criar DATASETS é possível verificar se já existe um que possa ser copiado, para isso é só escrever o tipo... por exemplo LIBS / COBOL e LIBS / JCL, caso dê enter e apareça as especificações dele então quer dizer que existe um que pode ser copiado, mas caso não tenha ele irá informar com uma mensagem. Sendo assim será necessário utilizar o comando A, para alocar um novo DATASET
+
+Para verificar os DATASETS criados, vá em DSLIST na opção 4 do segundo menu
+Ao acessar a tela DSLIST troque o nome pelo nome que você deu, por exemplo ali foi LIBS
+É possível entrar nas LIBS criadas colocando um E na frente do nome (no lugar do apóstrofo ')
+
+
+OBSERVAÇÕES IMPORTANTES:
+- Ao acessar o editor de texto (criando um arquivo), caso sai sem digitar qualquer coisa o arquivo não será salvo, pois na primeira entrada tem que ter pelo menos 1 byte ocupado
+- Na segunda entrada isso não acontecerá
+
+

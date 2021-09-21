@@ -1,0 +1,154 @@
+Anotações referentes a linguagem COBOL
+- A linguagem COBOL é orianteada por divisões
+- Dentro das divisões existem as seções
+- Dentro das seções existem os "parágrafos", cada informação passada nas divisões são chamadas de parágrafo;
+- São 4 divisões: IDENTIFICATION DIVISION., ENVIROMENT DIVISION., DATA DIVISION. e PROCEDURE DIVISION.
+
+DIV
+    SEC
+        PARAG
+
+
+Sobre as divisões do COBOL:
+IDENTIFICATION DIVISION.: Ficam as características gerais de documentação do programa como por exemplo (Autor, nome do programa, quando foi feito e etc)
+Alguns parágrafos existentes(lembrando que o '- hífen' eu utilizei só para organizar a anotação, ele não faz parte da sintaxe)
+- PROGRAM-ID. PROG001.     (Exemplo usando o mesmo nome do fonte usado no curso, o nome PROG001 definido no PROGRAM-ID é o nome interno, é importante que o nome interno e externo (o nome do arquivo) sejam os mesmos para evitar problemas ao localizar na memória)
+- AUTHOR
+- COMPILED
+
+ENVIROMENT DIVISION.: Características do fonte, por exemplo em algumas regiões o separador decimal pode mudar entre com ponto ou com vírgula, essa especificação deve ser feita nessa divisão.
+-SPECIAL-NAMES.
+    DECIMAL-POINT IS COMMA.     (COMMA é vírgula, ponto seria PERIOD)
+
+DATA DIVISION.: Divisão onde ficam os dados do programa, dados podem ser entendidos como as variáveis dele. Existem 3 lugares para se guardar variáveis (WORKING-STORAGE SECTION., LINKAGE SECTION. e a FILE SECTION.)
+- WORKING-STORAGE SECTION.: Variáveis usadas localmente no programa
+- LINKAGE SECTION.: Variáveis para trocar dados entre programas -> Variáveis de troca
+- FILE SECTION.: Variáveis de arquivos, onde são manuseados os de dados de arquivos
+
+PROCEDURE DIVISION.: Divisão onde ficam os comandos, funções, sequências.
+
+OBSERVAÇÕES.: 
+- Na divisão IDENTIFICATION DIVISION o mínimo necessário de informações é o nome do programa (PROGRAM-ID)
+- Na ENVIROMENT DIVISION e DATA DIVISION não é necessário adicionar informações a ela
+- Na PROCEDURE DIVISION precisa de pelo menos 1 ação
+
+Colunas:
+1-6   - Área de REMARKS
+7     - O asterísco * indica comentário e o Underline indica continuação da linha anterior
+8-11  - Região conhecida como Área A, usada para a escrita de divisões, seções, parágrafos e variáveis
+12-72 - Conhecida como Área B, é usada para escrever os comandos de PROCEDURE
+
+* -> Asterísco são comentários no COBOL
+_ -> Underline serve para informar que aquela informação é uma continuação da linha anterior
+. -> O ponto é usado apenas no final de uma sentença
+
+
+EXEMPLO DE CÓDIGO
+----+----1----+----2----+----3----+----4----+----5----+----6----+----7----
+            DISPLAY "PRIMEIRO PROGRMA".
+            STOP RUN.
+
+Uma outra forma também poderia ser 'DISPLAY WRK-NOME. onde WRK-NOME é um exemplo de uma variável declarada'
+DISPLAY é um comando que roda apenas no COBOL BACH, que é o COBOL sem interface com usuário. É usado para retornar algo na tela ou impressora (um programa pode conter vários DISPLAY)
+STOP RUN é um comando para encerrar o programa (é esperado que um programa contenha apenas 1 STOP RUN ou no máximo 2 para não ter uma quebra de lógica)
+
+
+SEQUÊNCIA PARA SE COMPILAR UM PROGRAMA EM COBOL:
+EDITAR FONTE COBOL
+    SALVAR
+ABRIR COMPILADOR COBOL (JCL)
+    COMPILAR
+        MAXCC (MAX CONDITION CODE, CONDIÇÃO DE COMPILAÇÃO) -> 0 = SUCESSO, >0 = PROBLEMA (podem ser vários números, quanto maior o número maior é a gravidade do erro)
+            SE MAXCC = 8
+                ANALISAR ERRO NO SYSOUT (área de saída)
+                VOLTAR NO FONTE COBOL - SALVAR
+                VOLTAR NO COMPILADOR - SUBMIT (rodar novamente)
+REPETE ATÉ O MAXCC = 0
+    SE MAXCC = 0 - GEROU O EXECUTÁVEL
+        ABRIR O JCL DE EXECUÇÃO E RODAR
+
+Para criar um arquivo JCL de compilação
+
+JOB (Exmeplo de JOB ao criar o JCL de COMPILAR e finalizar com SUB):
+JOB HERC01XX(JOB00188) SUBMITTED
+- É importante guardar o número do JOB, no caso '188'
+
+***** Ao criar o JCL de compilar e dar o SUB ele vai pra tela do JOB onde mostra o número dele, ao pressionar ENTER ele vai pra tela de MAXCC onde é mostrado os possíveis erros e se compilou com sucesso
+
+ERROS (Exemplos de erros):
+- $HASP165  JOB     HERC01XX    ENDED-  ABEND   SYSTEM  013 (EXEMPLO DE SAÍDA)
+ABEND - S013 - Significa que o JCL não achou o fonte do COBOL (pode estar com o nome errado ou algo assim)
+ABEND - S806 - Significa que ele não achou o arquivo executável
+
+- Para ir no SYSOUT (área de saída dos JOBS jcl) basta seguir o caminho
+    No menu principal ir na opção 1, depois na opção 3(UTILITIES) e depois na opção 8(OUTLIST) ---> também é possível, se souber o caminho, digitar 3.8 para ele ir direto no caminho desejado
+
+A Tela de OUTLIST irá mostrar as compilações que foram feitas, para analisar elas basta ir na primeira coluna onde tem um S e ver qual o número do JOB executado e colocar um S (de SHOW) nela para mostrar o resumo da compilação e ver o que aconteceu
+F8 é usado para avançar para baixo até encontrar o ERRO apresentado
+O comando TOP sob toda a página
+O Comando M e ao invés de usar ENTER apertar F8 ele vai diretamente para o final da página 
+
+S EXECOB na tela dos JCL pra abrir um novo JCL e escrever as informações do JCL de execução 
+
+- Existem mais seções existentes no COBOL:
+LINKAGE SECTION.
+FILE SECTION.
+
+* Variáveis *
+Para criar variáveis o nível dela(77 quer dizer uma variável pública e descartável) deve ser escrito na coluna 8 e o nome dela na coluna 12 e picture logo em seguida. O cobol só tem dois tipos de variável STRING e NUMERO
+ex.:
+
+77  WRK-NOME PICTURE X(30).
+77  WRK-SALARIO PICTURE 9(5).
+OBS.: é possível também abreviar a palavra PICTURE para PIC
+
+PICTURE - É o formato da variável
+STRING - Pode ser do tipo "A" que é alfabético e "X" que é alfanumérico
+NUMERO - É representado pelo número 9, conforme exemplo acima
+ACCEPT - É onde ele irá ler a informação passada, no caso do curso é o JCL, mas em produção seria no Sistema Operacional
+VALUE SPACES - Limpa qualquer dado que já estivesse na memória alocada para a variável, colocar após declarar a variável
+VALUE ZEROS - Serve para limpar os dados que já estivessem na memória, igual o VALUE SPACES, porém o VALUE ZEROS é para variáveis numéricas enquanto que o SPACES é para texto
+
+Para imprimir texto e variáveis é só colocar entre aspas simples, exemplo:
+
+DISPLAY 'NOME......' WRK-NOME.
+ou
+DISPLAY 'NOME......' WRK-NOME 'DIGITADO PELO USUÁRIO' WRK-USR.
+
+O que tiver entre aspas simples será impresso de maneira literal e onde tiver os espaços ele irá buscar por uma variável
+
+**************IMPORTANTÍSSIMO****************
+No arquivo JCL de Execução quando se tem informações a serem inseridas, pode adicionar nele
+ex.:
+//SYSIN DD *
+NOME PESSOA
+EMPRESA PESSOA
+
+OPERADORES ARITMÉTICOS
+ADD
+SUBTRACT
+DIVIDE
+MULTIPLY
+COMPUTE
+
+EX. SOMA:
+ADD WRK-V1 WRK-V2 TO WRK-RES
+DIVIDE WRK-RES BY 2 INTO WRK-RES
+
+Ou usando o compute para fazer expressões:
+COMPUTE WRK-RES = (WRK-V1 + WRK-V2) / 2
+
+EX. SUBTRAÇÃO:
+No caso de Subtração se usa a sintaxe:
+MOVE 0 TO WRK-RES.
+SUBTRACT WRK-V1 FROM WKR-V2 GIVING WRK-RES.
+
+Nesse caso está subtraindo v2 de v1 (sim, é ao contrário) e o GIVING é para que ele atribua o resultado a WRK-RES
+O MOVE é para que o valor de WRK-RES fique com 0, isso foi utilizado no exemplo do PROG003, pois todos os operadores aritméticos foram explicado no mesmo programa e para que o resultado fosse zerado a cada operação o comando MOVE foi utilizado.
+
+EX. MULTIPLICAÇÃO:
+A sintaxe para a multiplicação é:
+MULTIPLY WRK-V1 BY WRK-V2 GIVING WRK-RES.
+
+No caso da multiplicação também é utilizado GIVING, para que a variável de resposta, no exemplo WRK-RES, receba o resultado da operação
+
