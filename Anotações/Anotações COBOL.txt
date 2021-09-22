@@ -152,3 +152,33 @@ MULTIPLY WRK-V1 BY WRK-V2 GIVING WRK-RES.
 
 No caso da multiplicação também é utilizado GIVING, para que a variável de resposta, no exemplo WRK-RES, receba o resultado da operação
 
+EX. DIVISÃO:
+Sintaxe para a divisão:
+DIVIDE WRK-V1 BY WRK-V2 GIVING WRK-RES.
+
+A divisão utiliza o mesmo conceito da multiplicação onde é usado 'BY' e depois 'GIVING' para atribuir o resultado a uma determinada variável
+
+*******VARIÁVEIS**********
+
+Sobre os níveis de variáveis:
+77 -> variável livre, utilizada localmente e com um único valor
+66 -> variável rename
+1-49 -> variável de grupo
+99 -> variável lógica
+
+Exemplo usando variável de grupo:
+01 WRK-CLIENTE
+    05 WRK-NOMECLI PIC X(20).
+    05 WRK-ENDCLI  PIC X(30).
+
+Caso uma variável tenha "netos" ficaria assim:
+01 WRK-CLIENTE
+    05 WRK-NOMECLI PIC X(20).
+    05 WRK-ENDCLI
+        07 WRK-RUACLI PIC X(15).
+        07 WRK-NUMCLI PIC X(05).
+    05 WRK-PROFCLI PIC X(15).
+
+Em ambos os casos só será necessário um ACCEPT no arquivo JCL, referente ao WRK-CLIENTE
+
+Uma variável de grupo está dentro de uma estrutura, o caso acima se refere a uma variável WRK-CLIENTE que possuem 2 filhos que respondem diretamente a ela, que fazem parte do grupo determinado a ela
