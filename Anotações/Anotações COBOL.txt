@@ -182,3 +182,39 @@ Caso uma variável tenha "netos" ficaria assim:
 Em ambos os casos só será necessário um ACCEPT no arquivo JCL, referente ao WRK-CLIENTE
 
 Uma variável de grupo está dentro de uma estrutura, o caso acima se refere a uma variável WRK-CLIENTE que possuem 2 filhos que respondem diretamente a ela, que fazem parte do grupo determinado a ela
+
+Exemplo de variável COMP:
+
+77  WRK-RES  PIC 9(03)    COMP  VALUE  ZEROS.
+
+Essa variável é para números, ela não altera o valor, a diferença que ela causa é que ao executar alguma ação usando COMP ela irá ler apenas meio byte, o que torna a execução mais rápida.
+
+Sobre variáveis com máscara de saída:
+Para configurar a saída dos dados no COBOL, é necessário aplicar uma configuração após a declaração da variável que receberá o resultado, por exemplo:
+
+77 WRK-RES    PIC 9(03)V99 COMP VALUE ZEROS.
+77 WRK-RES-ED PIC ZZ9,99 VALUE ZEROS.
+
+OBS.: É importante se atentar que a soma dos campos do resultado tem que ser maior que os outros, tipo: se reservar 2 casas inteiras e 2 decimais para somar, sendo assim é uma boa deixar o resultado com 3 casas inteiras e 2 decimais, para não estourar. Além disso a variável que irá conter a máscara precisa ter o mesmo tamanho da do resultado. Ex.: WRK-RES e WRK-RES-ED precisam ter o mesmo tamanho.
+
+Nesse exemplo, após declarar a variável que receberá o resultado da equação foi criada uma outra variável chamada de "WRK-RES-ED" e atribuído o número de casas usadas. ZZ9,99 (para 3 casas inteiras e 2 decimais) o Z nessa situação está representando as casas, porém o restante foi preenchido com 9, isso ocorre para que seja forçado no mínimo um '0' ali.
+Exemplo:
+Se o resultado fosse '0,10' caso tudo fosse preenchido apenas com 'Z' a saída seria ',10'
+
+Outra coisa importante para se observar é o 'V99'. Isso está representando o número de casas após o separador. O 'V' é de value.
+
+Mas como no padrão americano é usado ponto ao invés de vírgula para separar é necessário adicionar uma seção chamada CONFIGURATION e adicionar um parágrafo. Segue exemplo:
+
+CONFIGURATION                   SECTION.
+SPECIAL-NAMES.
+    DECIMAL-POINT IS COMMA.
+
+Comma significa vírgula, aí está dizendo que o separador será representado por vírgula e não por ponto.
+
+Antes de imprimir o resultado de uma variável editada com máscara é importante transferir o valor de uma pra outra, nesse exemplo seria transferir o valor de WRK-RES para WRK-RES-ED:
+
+MOVE WRK-RES TO WRK-RES-ED.
+
+
+
+

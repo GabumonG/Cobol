@@ -1,5 +1,5 @@
   IDENTIFICATION                  DIVISION.   
-  PROGRAM-ID. PROG002.                        
+  PROGRAM-ID. PROG003.                        
   ENVIRONMENT                     DIVISION.   
   DATA                            DIVISION.   
   WORKING-STORAGE                 SECTION.    
