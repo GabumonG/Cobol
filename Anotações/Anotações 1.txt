@@ -32,6 +32,7 @@ TOP         ->    Topo, esse comando avança para o topo da página diretamente
 M (com ENTER) ->  Esse comando avança para o final da página diretamente, é necessário executá-lo usando F8 ao invés do ENTER
 S NOME      ->    Criar, esse comando cria um novo arquivo com o nome colocado na frente do S (exemplo: "S COMPILA" para criar um arquivo chamado compila)
 COPY NOME   ->    Copiar, esse comando copia diretamente tudo do arquivo apenas colocando o nome dele do lado do comando (mas antes é importante criar o arquivo usando S NomeArquivo)
+TS          ->    Pula linha, esse comando manda o que não cabe na linha para a linha de baixo sem a necessidade de escrever novamente
 
 OBSERVAÇÕES: 
 - É possível colocar os comandos onde está os asteriscos também

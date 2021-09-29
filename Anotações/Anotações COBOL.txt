@@ -215,6 +215,56 @@ Antes de imprimir o resultado de uma variável editada com máscara é important
 
 MOVE WRK-RES TO WRK-RES-ED.
 
+Sobre estruturas condicionais (IF e IF ELSE):
 
+>    - GREATER
+<    - LESS
+=    - EQUAL
+!=   - NOT
 
+'GREATER THAN' e 'LESS THAN' são usados no COBOL para representar 'maior que' e 'menor que', mas isso depende da idade do programa, os mais novos por exemplo, já usam os operadores diretamente.
+
+Sobre o comando PERFORM e GO TO:
+São comandos que reaproveitam trechos de códigos que serão usados novamente dentro do programa, porém existe uma diferença entre esses dois comandos. Enquanto que o PERFORM tem a capacidade de ir e voltar do trecho de código que será utilizado após terminar a ação, o GOTO não, sendo necessário forçá-lo através de outro GOTO a voltar ao local de onde ele havia saído para prosseguir com a execução.
+
+Existe mais de um tipo de PERFORM, os três mais comum são:
+
+PERFORM TIMES
+- Esse é para quando se sabe o número de vezes necessárias para executar uma ação.
+Ex.: 
+    PERFORM 0100-IMPRIME 5 TIMES.
+Para imprimir 5 vezes
+
+PERFORM VARYING
+- Esse também é para quando se sabe o número de vezes que será executada a ação, porém é possível controlar a forma como será executada, o conceito é o mesmo do 'FOR' em qualquer linguagem.
+Ex.:
+    PERFORM 0100-IMPRIME VARYING LINHA FROM 5 BY 1 UNTIL LINHA 11
+Para executar uma ação de 1 em 1 vez começando pela linha 5 e indo até a linha 11
+
+PERFORM UNTIL
+- Esse comando é para quando se tem um final indefinido, ou seja, não se sabe exatamente quantos registros tem
+Ex.:
+    PERFORM 0100-IMPRIME UNTIL FS = 10
+Para executar a ação até que o status seja 10
+
+Sobre LÓGICA ESTRUTURADA:
+Esse conceito diz que todo programa tem um processo de ENTRADA, PROCESSAMENTO e SAÍDA e essa estrutura, no cobol, deve ser organizada através dos PARÁGRAFOS.
+Ex.:
+
+PROCEDURE
+0001-PRINCIPAL.
+    PERFORM 0100-INICIAR.
+    PERFORM 0200-PROCESSAR UNTIL FILESTATUS = 10
+    PERFORM 0300-FINALIZAR.
+     STOP RUN.
+
+0100-INICIAR.
+    ABERTURA DO ARQUIVO
+
+0200-PROCESSAR.
+    LEITURA DOS REGISTROS 
+    FILESTATUS
+
+0300-FINALIZAR.
+    CLOSE ARQUIVO
 
